@@ -1,39 +1,26 @@
-name: Run PHP Script
+name: system libs
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  schedule:
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
-  run-script:
+  run-php:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-        extensions: pcntl
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
 
-    - name: Run PHP Script
-      run: |
-        echo "Starting PHP script"
-        php script.php
-
-    - name: Archive Results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: script-results
-        path: results.txt
-        retention-days: 7
-
-    - name: Print Logs
-      run: |
-        echo "Script completed. Check the logs above for execution details."
+      - name: Run sys.php
+        run: |
+          for i in {1..10}
+          do
+            echo "Run #$i"
+            php script.php
+          done
